@@ -2,11 +2,11 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-// const authRoutes = require("./routes/auth");
-const bodyParser = require("body-parser");
 const productRoutes = require("./routes/products");
+
 dotenv.config;
 const PORT = process.env.PORT || 3000;
+
 // Middleware to parse JSON bodies
 mongoose
   .connect(
@@ -21,5 +21,4 @@ mongoose
   .catch((err) => console.error("Could not connect to MongoDB Atlas", err));
 
 app.use(express.json());
-// app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
