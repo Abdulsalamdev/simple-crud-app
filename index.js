@@ -8,8 +8,6 @@ const productRoutes = require("./routes/products");
 dotenv.config;
 const PORT = process.env.PORT || 3000;
 // Middleware to parse JSON bodies
-app.use(bodyParser.json());
-
 mongoose
   .connect(
     "mongodb+srv://Abdulsalam:30GovyQjTByIdz1U@backenddb.ihnyd.mongodb.net/Node-API?retryWrites=true&w=majority&appName=BackendDB"
@@ -22,5 +20,6 @@ mongoose
   })
   .catch((err) => console.error("Could not connect to MongoDB Atlas", err));
 
+app.use(express.json());
 // app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
