@@ -8,14 +8,14 @@ router.get("/", async (req, res) => {
     const address = await Address.find().sort("cityName");
     res.status(200).send(address);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 });
 
 //Creating new Address
 router.post("/", async (req, res) => {
   const { error } = addressValidator(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send({ message: error.details[0].message });
   const { cityName, description, isHeadquarter } = req.body;
   try {
     const newAddress = new Address({
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
     const savedAddress = await newAddress.save();
     res.status(201).send(savedAddress);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 });
 
@@ -37,7 +37,7 @@ router.get("/:id", async (req, res) => {
     if (!address) return res.status(404).send({ message: "Address not found" });
     res.status(200).send(address);
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 });
 
@@ -51,7 +51,7 @@ router.put("/:id", async (req, res) => {
     if (!address) return res.status(404).send({ message: "Address not found" });
     res.status(200).send(address);
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 });
 
@@ -62,7 +62,7 @@ router.delete("/:id", async (req, res) => {
     if (!address) return res.status(404).send({ message: "Address not found" });
     res.status(200).send({ message: "Address deleted successfully" });
   } catch (error) {
-    return res.status(500).send(error.message);
+    return res.status(500).send({ message: error.message });
   }
 });
 module.exports = router;

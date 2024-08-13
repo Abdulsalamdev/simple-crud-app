@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 // Create a new product
 router.post("/", async (req, res) => {
   const { error } = productValidator(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send({ massage: error.details[0].message });
   const { name, price, description, category, stock } = req.body;
 
   try {
@@ -42,7 +42,7 @@ router.get("/:id", async (req, res) => {
 
     res.status(200).send(product);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 });
 
@@ -58,7 +58,7 @@ router.put("/:id", async (req, res) => {
 
     res.status(200).send(product);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 });
 
@@ -71,7 +71,7 @@ router.delete("/:id", async (req, res) => {
 
     res.status(200).send({ message: "Product deleted" });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 });
 
