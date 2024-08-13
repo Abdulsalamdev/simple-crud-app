@@ -1,5 +1,5 @@
 const express = require("express");
-const { Product, productValidator } = require("../model/product");
+const { Product, productValidator } = require("../models/product");
 const router = express.Router();
 
 // Get all products
@@ -42,10 +42,7 @@ router.get("/:id", async (req, res) => {
 
     res.status(200).send(product);
   } catch (error) {
-    if (error.name === "CastError") {
-      return res.status(400).send("Invalid ID format");
-    }
-    res.status(500).send("Server Error");
+    res.status(500).send(error.message);
   }
 });
 
@@ -61,10 +58,7 @@ router.put("/:id", async (req, res) => {
 
     res.status(200).send(product);
   } catch (error) {
-    if (error.name === "CastError") {
-      return res.status(400).send("Invalid ID format");
-    }
-    res.status(500).send("Server Error");
+    res.status(500).send(error.message);
   }
 });
 
@@ -77,10 +71,7 @@ router.delete("/:id", async (req, res) => {
 
     res.status(200).send({ message: "Product deleted" });
   } catch (error) {
-    if (error.name === "CastError") {
-      return res.status(400).send("Invalid ID format");
-    }
-    res.status(500).send("Server Error");
+    res.status(500).send(error.message);
   }
 });
 

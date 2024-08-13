@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const productRoutes = require("./routes/products");
+const addressRoutes = require("./routes/address");
 
 dotenv.config;
 const PORT = process.env.PORT || 3000;
@@ -22,3 +23,4 @@ mongoose
 
 app.use(express.json());
 app.use("/api/products", productRoutes);
+app.use("/api/address", addressRoutes);
