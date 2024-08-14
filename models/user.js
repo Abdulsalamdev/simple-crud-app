@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const { required } = require("joi");
 const mongoose = require("mongoose");
+const { refreshToken } = require("../config");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -31,12 +32,23 @@ const userSchema = new mongoose.Schema({
     minlength: [8, "Password must be at least 8 characters long"],
     required: true,
   },
+  // role: {
+  //   type: String,
+  //   enum: ["admin", "user"],
+  //   default: "user",
+  // },
   createAt: {
     type: Date,
     default: Date.now(),
   },
 });
 
+const refreshTokenSchema = new mongoose.Schema({
+  refreshToken: String,
+  userId: String,
+});
+
+const RefreshToken = mongoose.model("refreshToken", refreshTokenSchema);
 const User = mongoose.model("User", userSchema);
 
 const userValidator = (user) => {
@@ -47,6 +59,7 @@ const userValidator = (user) => {
       .required(),
     password: Joi.string().min(8).required(),
     confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
+    // role: Joi.string(),
   });
   return schema.validate(user);
 };
@@ -59,4 +72,4 @@ const loginValidator = (user) => {
   });
   return schema.validate(user);
 };
-module.exports = { User, userValidator, loginValidator };
+module.exports = { User, userValidator, loginValidator, RefreshToken };

@@ -1,18 +1,17 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+// const dotenv = require("dotenv");
 const productRoutes = require("./routes/products");
 const addressRoutes = require("./routes/address");
 const authRoutes = require("./routes/users");
-dotenv.config;
+const config = require("./config");
+// dotenv.config;
 const PORT = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies
 mongoose
-  .connect(
-    "mongodb+srv://Abdulsalam:30GovyQjTByIdz1U@backenddb.ihnyd.mongodb.net/Node-API?retryWrites=true&w=majority&appName=BackendDB"
-  )
+  .connect(config.uri)
   .then(() => {
     console.log("Connected to MongoDB Atlas");
     app.listen(PORT, () => {

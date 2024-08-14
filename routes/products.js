@@ -1,9 +1,10 @@
 const express = require("express");
 const { Product, productValidator } = require("../models/product");
+const { auth } = require("../middleware/auth");
 const router = express.Router();
 
 // Get all products
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const products = await Product.find().sort("name");
     res.status(200).send(products);
