@@ -21,9 +21,6 @@ const generateRefreshToken = (user) => {
   });
 };
 
-const logoutUser = async (user) => {
-  return (this.user.refreshToken = null);
-};
 // Creating User
 router.post("/register", async (req, res) => {
   try {

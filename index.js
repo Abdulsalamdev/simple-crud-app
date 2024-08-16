@@ -6,19 +6,19 @@ const productRoutes = require("./routes/products");
 const addressRoutes = require("./routes/address");
 const authRoutes = require("./routes/users");
 const config = require("./config");
-// dotenv.config;
+require("dotenv").config();
 const PORT = process.env.PORT || 3000;
-
+// const mongodbUri = process.env.MONGO_URI;
 // Middleware to parse JSON bodies
 mongoose
   .connect(config.uri)
   .then(() => {
-    console.log("Connected to MongoDB Atlas");
+    console.log("Connected to MongoDB server");
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
     });
   })
-  .catch((err) => console.error("Could not connect to MongoDB Atlas", err));
+  .catch((err) => console.error("Could not connect to MongoDB server", err));
 
 app.use(express.json());
 app.use("/api/auth", authRoutes);
