@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     minlength: [8, "Password must be at least 8 characters long"],
     required: true,
   },
-  refreshtoken: {
+  refreshToken: {
     type: String,
   },
   createAt: {
@@ -62,4 +62,8 @@ const loginValidator = (user) => {
   });
   return schema.validate(user);
 };
-module.exports = { User, userValidator, loginValidator };
+module.exports = {
+  User,
+  userValidator,
+  loginValidator,
+};

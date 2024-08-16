@@ -20,6 +20,10 @@ const generateRefreshToken = (user) => {
     expiresIn: config.refreshTokenexpiresIn,
   });
 };
+
+const logoutUser = async (user) => {
+  return (this.user.refreshToken = null);
+};
 // Creating User
 router.post("/register", async (req, res) => {
   try {
@@ -43,7 +47,11 @@ router.post("/register", async (req, res) => {
 
     return res.status(201).send({
       message: "User Successfully Created",
-      id: newUser._id,
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+      },
     });
   } catch (error) {
     res.status(500).send({ message: error.message });
@@ -60,7 +68,7 @@ router.post("/login", async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user)
-      return res.status(401).send({ message: "Invald email or passwor" });
+      return res.status(401).send({ message: "Invald email or password" });
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch)
@@ -69,15 +77,17 @@ router.post("/login", async (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    user.refreshtoken = refreshToken;
+    user.refreshToken = refreshToken;
     await user.save();
 
     return res.status(200).send({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      accessToken,
-      refreshToken,
+      message: "user Logged in successfully",
+      user: {
+        id: user._id,
+        email: user.email,
+        accessToken,
+        refreshToken,
+      },
     });
   } catch (error) {
     res.status(500).send({ message: error.message });
@@ -85,15 +95,21 @@ router.post("/login", async (req, res) => {
 });
 
 // RfreshToken
-router.post("/refresh-token", async (req, res) => {
-  const { refreshToken } = req.body;
+router.post("/refresh-token", auth, async (req, res) => {
+  const { refreshToken, email } = req.body;
+  let accessToken;
   try {
-    const user = await User.find({ refreshToken });
-    if (!user) res.status(401).send({ message: " refresh token not found" });
+    const user = await User.findOne({ email });
+    if (!user) res.status(400).send({ message: " email not found" });
+    if (user.refreshToken === null)
+      res.status(404).send({ message: " refresh token not found" });
+
     const decodedRefreshToken = jwt.verify(refreshToken, config.refreshToken);
-    if (!decodedRefreshToken)
-      return res.status(402).send({ message: "Verify refresh token" });
-    const accessToken = generateAccessToken(user);
+    if (decodedRefreshToken) {
+      accessToken = generateAccessToken(user);
+    } else {
+      return res.status(401).send({ message: "token invalid or expired" });
+    }
 
     return res.status(200).send({
       id: user._id,
@@ -104,24 +120,38 @@ router.post("/refresh-token", async (req, res) => {
       error instanceof jwt.TokenExpiredError ||
       error instanceof jwt.JsonWebTokenError
     ) {
-      return res.status(400).send({ message: "refresh token invalid expired" });
+      return res
+        .status(400)
+        .send({ message: "refresh token invalid or expired" });
     }
     res.status(500).send({ message: error.message });
   }
 });
 
 //LogOut
-router.post("/log-out", async (req, res) => {
-  const { refreshToken } = req.body;
-  console.log(refreshToken);
+router.post("/log-out", auth, async (req, res) => {
+  const { refreshToken, email } = req.body;
   try {
-    const user = await User.find({ refreshToken });
-    if (!user) return res.status(401).send({ message: "Inavlid Token" });
+    const user = await User.findOne({ email });
+    if (!user) res.status(400).send({ message: " email not found" });
 
-    // await user.save();
+    const decoded = jwt.verify(refreshToken, config.refreshToken);
+    if (!decoded)
+      return res.status(401).send({ message: "Token invalid or expired" });
 
-    return res.status(204);
+    user.refreshToken = null;
+    user.save();
+    // console.log(user);
+    // await User.updateOne({ _id: decoded.userId }, { refreshToken });
+
+    return res.status(200).send({ message: "User successfully logged out" });
   } catch (error) {
+    if (
+      error instanceof jwt.TokenExpiredError ||
+      error instanceof jwt.JsonWebTokenError
+    ) {
+      return res.status(400).send({ message: "refresh token invalid expired" });
+    }
     return res.status(500).send({ message: error.message });
   }
 });
