@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 const { auth } = require("../middleware/auth");
 
-// Token generator
+// Access Token generator
 const generateAccessToken = (user) => {
   return jwt.sign({ id: user._id }, config.accessToken, {
     subject: "Access API",
@@ -14,6 +14,7 @@ const generateAccessToken = (user) => {
   });
 };
 
+//Refresh token generator
 const generateRefreshToken = (user) => {
   return jwt.sign({ id: user._id }, config.refreshToken, {
     subject: "Refresh API",
