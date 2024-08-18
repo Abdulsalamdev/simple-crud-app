@@ -3,7 +3,7 @@ const router = express.Router();
 const { Address, addressValidator } = require("../models/address");
 
 //Getting list of address
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const address = await Address.find().sort("cityName");
     res.status(200).send(address);
@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 });
 
 //Creating new Address
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = addressValidator(req.body);
   if (error) return res.status(400).send({ message: error.details[0].message });
   const { cityName, description, isHeadquarter } = req.body;
@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
 });
 
 //Get a single address
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
     const address = await Address.findById(req.params.id);
     if (!address) return res.status(404).send({ message: "Address not found" });
@@ -42,7 +42,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //Editing address
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   try {
     const address = await Address.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -56,7 +56,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //Deleting address
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const address = await Address.findByIdAndDelete(req.params.id);
     if (!address) return res.status(404).send({ message: "Address not found" });

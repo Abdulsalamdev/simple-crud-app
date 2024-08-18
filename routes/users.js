@@ -139,8 +139,6 @@ router.post("/log-out", auth, async (req, res) => {
 
     user.refreshToken = null;
     user.save();
-    // console.log(user);
-    // await User.updateOne({ _id: decoded.userId }, { refreshToken });
 
     return res.status(200).send({ message: "User successfully logged out" });
   } catch (error) {

@@ -1,15 +1,13 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-// const dotenv = require("dotenv");
 const productRoutes = require("./routes/products");
 const addressRoutes = require("./routes/address");
 const authRoutes = require("./routes/users");
 const config = require("./config");
 require("dotenv").config();
 const PORT = process.env.PORT || 3000;
-// const mongodbUri = process.env.MONGO_URI;
-// Middleware to parse JSON bodies
+
 mongoose
   .connect(config.uri)
   .then(() => {

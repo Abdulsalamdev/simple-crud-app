@@ -14,7 +14,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 // Create a new product
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = productValidator(req.body);
   if (error) return res.status(400).send({ massage: error.details[0].message });
   const { name, price, description, category, stock } = req.body;
@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
 });
 
 // Get a single product by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).send({ message: "Product not found" });
@@ -48,7 +48,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Update a product by ID
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -64,7 +64,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a product by ID
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
 
