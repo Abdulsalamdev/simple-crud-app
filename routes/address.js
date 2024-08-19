@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Address, addressValidator } = require("../models/address");
+const { auth } = require("../middleware/auth");
 
 //Getting list of address
 router.get("/", auth, async (req, res) => {

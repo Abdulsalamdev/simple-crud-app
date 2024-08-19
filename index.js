@@ -5,8 +5,8 @@ const productRoutes = require("./routes/products");
 const addressRoutes = require("./routes/address");
 const authRoutes = require("./routes/users");
 const config = require("./config");
-require("dotenv").config();
-const PORT = process.env.PORT || 3000;
+// require("dotenv").config();
+const PORT = process.env.PORT || 5000;
 
 mongoose
   .connect(config.uri)
