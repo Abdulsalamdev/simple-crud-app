@@ -1,11 +1,13 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config");
+const dotenv = require("dotenv");
+dotenv.config();
+const { ACCESS_TOKEN } = process.env;
 async function auth(req, res, next) {
   const accessToken = req.headers.authorization;
   if (!accessToken)
     return res.status(401).send({ message: "Access Token not found" });
   try {
-    const decodedAccessToken = jwt.verify(accessToken, config.accessToken);
+    const decodedAccessToken = jwt.verify(accessToken, ACCESS_TOKEN);
     req.user = {
       id: decodedAccessToken.userId,
     };

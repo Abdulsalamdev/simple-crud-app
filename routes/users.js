@@ -8,23 +8,33 @@ const {
 } = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("../config");
 const { auth } = require("../middleware/auth");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const {
+  ACCESS_TOKEN,
+  ACCESS_TOKEN_EXPIRES_IN,
+  REFRESH_TOKEN,
+  REFRESH_TOKEN_EXPIRES_IN,
+  EMAIL,
+  EMAIL_PASSWORD,
+} = process.env;
 // Access Token generator
 const generateAccessToken = (user) => {
-  return jwt.sign({ id: user._id }, config.accessToken, {
+  return jwt.sign({ id: user._id }, ACCESS_TOKEN, {
     subject: "Access API",
-    expiresIn: config.accessTokenExpiresIn,
+    expiresIn: ACCESS_TOKEN_EXPIRES_IN,
   });
 };
 
 //Refresh token generator
 const generateRefreshToken = (user) => {
-  return jwt.sign({ id: user._id }, config.refreshToken, {
+  return jwt.sign({ id: user._id }, REFRESH_TOKEN, {
     subject: "Refresh API",
-    expiresIn: config.refreshTokenexpiresIn,
+    expiresIn: REFRESH_TOKEN_EXPIRES_IN,
   });
 };
 
@@ -108,7 +118,7 @@ router.post("/refresh-token", auth, async (req, res) => {
     if (user.refreshToken === null)
       res.status(404).send({ message: " refresh token not found" });
 
-    const decodedRefreshToken = jwt.verify(refreshToken, config.refreshToken);
+    const decodedRefreshToken = jwt.verify(refreshToken, REFRESH_TOKEN);
     if (decodedRefreshToken) {
       accessToken = generateAccessToken(user);
     } else {
@@ -139,7 +149,7 @@ router.post("/log-out", auth, async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) res.status(400).send({ message: " email not found" });
 
-    const decoded = jwt.verify(refreshToken, config.refreshToken);
+    const decoded = jwt.verify(refreshToken, REFRESH_TOKEN);
     if (!decoded)
       return res.status(401).send({ message: "Token invalid or expired" });
 
@@ -171,13 +181,13 @@ router.post("/forget-password", async (req, res) => {
       service: "gmail",
       debug: true, // Use `true` for port 465, `false` for all other ports
       auth: {
-        user: config.email,
-        pass: config.emailPassword,
+        user: EMAIL,
+        pass: EMAIL_PASSWORD,
       },
     });
 
     const mailOptions = {
-      from: config.email,
+      from: EMAIL,
       to: user.email,
       subject: "Password Reset Otp",
       text: `Your OTP is ${otp}. It is valid for 15 minutes`,
