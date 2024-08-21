@@ -33,6 +33,12 @@ const userSchema = new mongoose.Schema({
   refreshToken: {
     type: String,
   },
+  otpToken: {
+    type: String,
+  },
+  otpTokenExpiresIn: {
+    type: String,
+  },
   createAt: {
     type: Date,
     default: Date.now(),
@@ -50,6 +56,8 @@ const userValidator = (user) => {
     password: Joi.string().min(8).required(),
     confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
     refreshToken: Joi.string(),
+    otpToken: Joi.string(),
+    otpTokenExpiresIn: Joi.string(),
   });
   return schema.validate(user);
 };
@@ -62,8 +70,19 @@ const loginValidator = (user) => {
   });
   return schema.validate(user);
 };
+const resetPasswordValidator = (user) => {
+  const schema = Joi.object({
+    email: Joi.string()
+      .email({ tlds: { allow: true } })
+      .required(),
+    password: Joi.string().min(8).required(),
+    confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
+  });
+  return schema.validate(user);
+};
 module.exports = {
   User,
   userValidator,
   loginValidator,
+  resetPasswordValidator,
 };
