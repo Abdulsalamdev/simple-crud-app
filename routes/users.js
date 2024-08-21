@@ -151,4 +151,15 @@ router.post("/log-out", auth, async (req, res) => {
     return res.status(500).send({ message: error.message });
   }
 });
+
+// Forget password
+router.post("/forgetPassword", async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) res.status(404).send({ massage: "User not found" });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+});
 module.exports = router;

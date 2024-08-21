@@ -6,7 +6,17 @@ const router = express.Router();
 // Get all products
 router.get("/", auth, async (req, res) => {
   try {
-    const products = await Product.find().sort("name");
+    const filters = {};
+    if (req.query.name) {
+      filters.name = new RegExp(req.query.name, "i");
+    }
+    if (req.query.price) {
+      filters.price = { $gte: req.query.price };
+    }
+    if (req.query.category) {
+      filters.category = new RegExp(req.query.category, "i");
+    }
+    const products = await Product.find(filters).sort("name");
     res.status(200).send(products);
   } catch (error) {
     res.status(500).send({ message: error.message });
