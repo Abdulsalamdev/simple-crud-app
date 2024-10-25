@@ -16,12 +16,5 @@ async function auth(req, res, next) {
     res.status(401).send({ message: "Access token invalid or expired" });
   }
 }
-// function authorize(roles = []) {
-//   return async (req, res, next) => {
-//     const user = await User.findOne({ _id: req.user.id });
-//     if (!user || !roles.includes(user.role))
-//       return res.status(403).send({ message: "Access Denied" });
-//   };
-//   next();
-// }
+
 module.exports = { auth };
