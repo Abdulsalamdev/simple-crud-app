@@ -20,7 +20,8 @@ mongoose
   })
   .catch((err) => console.error("Could not connect to MongoDB server", err));
 
+app.use(cors());
 app.use(express.json());
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/address", addressRoutes);
+app.use("/auth", authRoutes);
+app.use("/products", productRoutes);
+app.use("/address", addressRoutes);
