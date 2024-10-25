@@ -12,9 +12,7 @@ const { DATABASE_URL } = process.env;
 const PORT = process.env.PORT || 5000;
 
 mongoose
-  .connect(
-    "mongodb+srv://Abdulsalam:30GovyQjTByIdz1U@backenddb.ihnyd.mongodb.net/Node-API?retryWrites=true&w=majority&appName=BackendDB"
-  )
+  .connect(DATABASE_URL)
   .then(() => {
     console.log("Connected to MongoDB server");
     app.listen(PORT, () => {
