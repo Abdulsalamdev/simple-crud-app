@@ -6,6 +6,7 @@ const addressRoutes = require("./routes/address");
 const authRoutes = require("./routes/users");
 const dotenv = require("dotenv");
 dotenv.config();
+const cors = require("cors");
 
 const { DATABASE_URL } = process.env;
 const PORT = process.env.PORT || 5000;
