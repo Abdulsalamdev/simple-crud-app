@@ -2,16 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { Address, addressValidator } = require("../models/address");
 const { auth } = require("../middleware/auth");
+const { getAll } = require("../controllers/address.controller");
 
 //Getting list of address
-router.get("/", auth, async (req, res) => {
-  try {
-    const address = await Address.find().sort("cityName");
-    res.status(200).send(address);
-  } catch (error) {
-    res.status(500).send({ message: error.message });
-  }
-});
+router.get("/", auth, getAll);
 
 //Creating new Address
 router.post("/", auth, async (req, res) => {
