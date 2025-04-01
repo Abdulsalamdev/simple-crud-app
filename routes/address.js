@@ -1,41 +1,22 @@
 const express = require("express");
-const router = express.Router();
+const addressRoutes = express.Router();
 const { Address, addressValidator } = require("../models/address");
 const { auth } = require("../middleware/auth");
-const { getAll, getOne, create } = require("../controllers/address.controller");
+const { getAll, getOne, create, editOne, deleteOne } = require("../controllers/address.controller");
 
 //, auth
 //Getting list of address
-router.get("/", getAll);
+addressRoutes.get("/", getAll);
 
 //Creating new Address
-router.post("/", create);
+addressRoutes.post("/", create);
 
 //Get a single address
-router.get("/:id",getOne);
+addressRoutes.get("/:id",getOne);
 
 //Editing address
-router.put("/:id", auth, async (req, res) => {
-  try {
-    const address = await Address.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!address) return res.status(404).send({ message: "Address not found" });
-    res.status(200).send(address);
-  } catch (error) {
-    return res.status(500).send({ message: error.message });
-  }
-});
+addressRoutes.put("/:id", editOne );
 
 //Deleting address
-router.delete("/:id", auth, async (req, res) => {
-  try {
-    const address = await Address.findByIdAndDelete(req.params.id);
-    if (!address) return res.status(404).send({ message: "Address not found" });
-    res.status(200).send({ message: "Address deleted successfully" });
-  } catch (error) {
-    return res.status(500).send({ message: error.message });
-  }
-});
-module.exports = router;
+addressRoutes.delete("/:id",deleteOne);
+module.exports = addressRoutes;

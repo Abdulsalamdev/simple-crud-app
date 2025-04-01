@@ -12,6 +12,7 @@ const addressSchema = new mongoose.Schema({
   },
   isHeadquarter: {
     type: Boolean,
+    default: false
   },
   createAt: {
     type: Date,
@@ -26,7 +27,7 @@ const addressValidator = (address) => {
   const schema = Joi.object({
     cityName: Joi.string().required(),
     description: Joi.string().required(),
-    isHeadquarter: Joi.boolean().required(),
+    isHeadquarter: Joi.boolean()
   });
   return schema.validate(address);
 };
