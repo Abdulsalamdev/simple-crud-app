@@ -3,17 +3,20 @@ const addressService = require("../services/address.service")
 
 const getAll =  async (req, res) => {
     try {
-      const address = await Address.find().sort("cityName");
-      res.status(200).send(address);
+      const address = await addressService.getAll()
+      res.status(200).send({
+        message: "Address retrived successfully",
+        data: address
+      });
     } catch (error) {
       res.status(500).send({ message: error.message });
     }
   }
 
 const getOne =  async (req, res) => {
+  const {id } = req.params
     try {
-      const address = await Address.findById(req.params.id);
-      if (!address) return res.status(404).send({ message: "Address not found" });
+     const address = await addressService.getOne(id)
       res.status(200).send(address);
     } catch (error) {
       return res.status(500).send({ message: error.message });
@@ -36,22 +39,22 @@ const address = await addressService.create(data)
 }
 
 const editOne = async (req, res) => {
+  const {params: {id}, boday} = req
     try {
-      const address = await Address.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
+     const address = await addressService.edit(id,boday)
+      res.status(200).send({
+        message: "Address edited Successfully",
+        data: address
       });
-      if (!address) return res.status(404).send({ message: "Address not found" });
-      res.status(200).send(address);
     } catch (error) {
       return res.status(500).send({ message: error.message });
     }
   }
 
-  const deleteOne = async (req, res) => {
+  const deleteAddress = async (req, res) => {
+    const {id}= req.params
     try {
-      const address = await Address.findByIdAndDelete(req.params.id);
-      if (!address) return res.status(404).send({ message: "Address not found" });
+      const address = await addressService.deleteAddress(id)
       res.status(200).send({ message: "Address deleted successfully" });
     } catch (error) {
       return res.status(500).send({ message: error.message });
@@ -63,5 +66,5 @@ const editOne = async (req, res) => {
     create,
     editOne,
     getOne,
-    deleteOne,
+    deleteAddress,
   }

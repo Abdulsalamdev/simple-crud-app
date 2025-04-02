@@ -1,7 +1,7 @@
 const express = require("express");
 const addressRoutes = express.Router();
 const { auth } = require("../middleware/auth");
-const { getAll, getOne, create, editOne, deleteOne } = require("../controllers/address.controller");
+const { getAll, getOne, create, editOne, deleteAddress } = require("../controllers/address.controller");
 
 //, auth
 //Getting list of address
@@ -17,5 +17,5 @@ addressRoutes.get("/:id",getOne);
 addressRoutes.put("/:id", editOne );
 
 //Deleting address
-addressRoutes.delete("/:id",deleteOne);
+addressRoutes.delete("/:id",deleteAddress);
 module.exports = addressRoutes;
