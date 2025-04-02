@@ -1,6 +1,5 @@
 const express = require("express");
 const addressRoutes = express.Router();
-const { Address, addressValidator } = require("../models/address");
 const { auth } = require("../middleware/auth");
 const { getAll, getOne, create, editOne, deleteOne } = require("../controllers/address.controller");
 

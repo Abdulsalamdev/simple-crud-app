@@ -1,4 +1,5 @@
 const {Address,addressValidator} = require("../models/address")
+const addressService = require("../services/address.service")
 
 const getAll =  async (req, res) => {
     try {
@@ -20,17 +21,15 @@ const getOne =  async (req, res) => {
   }
 
 const create = async (req, res) => {
-    const { cityName, description, isHeadquarter } = req.body;
+  const {body:data} = req
   const { error } = addressValidator(req.body);
   if (error) return res.status(400).send({ message: error.details[0].message });
   try {
-    const newAddress = new Address({
-      cityName,
-      description,
-      isHeadquarter,
+const address = await addressService.create(data)
+    res.status(201).send({
+      message: "Address created successfully",
+      data: address
     });
-    const savedAddress = await newAddress.save();
-    res.status(201).send(savedAddress);
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
