@@ -1,4 +1,3 @@
-const { deleteOne } = require("../controllers/address.controller");
 const {Address} = require("../models/address")
 
 const create = async (data) => {
