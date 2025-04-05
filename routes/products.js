@@ -6,18 +6,18 @@ const productRoutes= express.Router();
 
 //auth
 // Get all products
-productRoutes.get("/", getAllProduct);
+productRoutes.get("/", auth,getAllProduct);
 
 // Create a new product
-productRoutes.post("/", createProduct);
+productRoutes.post("/",auth, createProduct);
 
 // Get a single product by ID
-productRoutes.get("/:id",getOneProduct );
+productRoutes.get("/:id",auth,getOneProduct );
 
 // Update a product by ID
-productRoutes.put("/:id",editProduct);
+productRoutes.put("/:id",auth,editProduct);
 
 // Delete a product by ID
-productRoutes.delete("/:id",deleteProduct );
+productRoutes.delete("/:id",auth,deleteProduct );
 
 module.exports = productRoutes;

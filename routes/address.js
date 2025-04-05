@@ -5,17 +5,17 @@ const { getAll, getOne, create, editOne, deleteAddress } = require("../controlle
 
 //, auth
 //Getting list of address
-addressRoutes.get("/", getAll);
+addressRoutes.get("/", auth,getAll);
 
 //Creating new Address
-addressRoutes.post("/", create);
+addressRoutes.post("/", auth,create);
 
 //Get a single address
-addressRoutes.get("/:id",getOne);
+addressRoutes.get("/:id",auth,getOne);
 
 //Editing address
-addressRoutes.put("/:id", editOne );
+addressRoutes.put("/:id",auth, editOne );
 
 //Deleting address
-addressRoutes.delete("/:id",deleteAddress);
+addressRoutes.delete("/:id", auth,deleteAddress);
 module.exports = addressRoutes;
